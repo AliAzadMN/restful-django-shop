@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     # local
     'core.apps.CoreConfig',
+    'admin.apps.AdminConfig',
 
     # third-party
     'rest_framework',
