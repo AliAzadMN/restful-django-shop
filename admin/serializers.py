@@ -14,3 +14,11 @@ class GroupListRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ('id', 'name', 'permissions', )     
+
+
+class GroupPermissionSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=False)
+
+    class Meta:
+        model = Permission
+        fields = ('id', )
