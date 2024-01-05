@@ -45,12 +45,18 @@ INSTALLED_APPS = [
 
     # third-party
     'rest_framework',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+INTERNAL_IPS = [
+    "127.0.0.1",
 ]
 
 ROOT_URLCONF = 'config.urls'

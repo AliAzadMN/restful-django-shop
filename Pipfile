@@ -9,6 +9,7 @@ environs = "*"
 mysqlclient = "*"
 djangorestframework = "*"
 djangorestframework-simplejwt = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 
