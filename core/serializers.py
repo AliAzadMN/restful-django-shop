@@ -68,3 +68,34 @@ class UserCreateSerializer(serializers.ModelSerializer):
             self.fail("cannot_create_user")
 
         return user
+    
+
+class UserGroupSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=False)
+
+    class Meta:
+        model = Group
+        fields = ("id", )
+        
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    groups = UserGroupSerializer(many=True, required=False)
+
+    class Meta:
+        model = User
+        fields = ("groups", )
+    
+    def update(self, instance, validated_data):
+        groups_data = validated_data.get("groups")
+
+        instance.is_admin = bool(groups_data)
+        instance.save()
+
+        groups = [
+            Group.objects.get(
+                id=group['id'],
+            ) for group in groups_data
+        ]
+        instance.groups.set(groups)
+
+        return instance
