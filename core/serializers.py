@@ -78,7 +78,7 @@ class UserGroupSerializer(serializers.ModelSerializer):
         fields = ("id", )
         
 
-class UserUpdateSerializer(serializers.ModelSerializer):
+class UserAdminUpdateSerializer(serializers.ModelSerializer):
     groups = UserGroupSerializer(many=True, required=False)
 
     class Meta:
