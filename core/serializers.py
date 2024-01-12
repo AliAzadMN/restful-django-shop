@@ -8,6 +8,7 @@ from rest_framework.settings import api_settings
 from .constants import Messages
 from .models import User
 
+
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
@@ -41,6 +42,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'password', 're_password', )
+
+    def to_representation(self, instance):
+        return dict()
 
     def validate(self, data):
         re_password = data.pop("re_password")
@@ -84,6 +88,9 @@ class UserAdminUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("groups", )
+    
+    def to_representation(self, instance):
+        return dict()
     
     def update(self, instance, validated_data):
         groups_data = validated_data.get("groups")
