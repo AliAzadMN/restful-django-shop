@@ -100,3 +100,20 @@ class UserAdminUpdateSerializer(serializers.ModelSerializer):
         instance.groups.set(groups)
 
         return instance
+    
+
+class UserRetrieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("email", "first_name", "last_name", "birth_date", "national_number", "date_joined")
+
+    def to_representation(self, instance):
+        rep =  super().to_representation(instance)
+
+        if instance.is_admin != instance.is_superuser:
+            rep['is_admin'] = True
+            rep['groups'] = [
+                dict(id=group.id) for group in instance.groups.all()
+            ] 
+
+        return rep   
