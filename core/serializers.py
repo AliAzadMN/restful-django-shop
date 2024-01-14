@@ -117,3 +117,19 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
             ] 
 
         return rep   
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("first_name", "last_name", "birth_date", "national_number", )
+    
+    def update(self, instance, validated_data):
+        for field in UserUpdateSerializer.Meta.fields:
+            setattr(
+                instance,
+                field, 
+                validated_data.get(field, getattr(instance, field))
+            )
+        instance.save()
+        return instance
