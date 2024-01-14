@@ -133,3 +133,22 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             )
         instance.save()
         return instance
+
+
+class UserDeleteSerializer(serializers.Serializer):
+    default_error_messages = {
+        "invalid_password": Messages.INVALID_PASSWORD_ERROR,
+    }
+
+    current_password = serializers.CharField(
+        style={"input_type": "password"}, 
+        write_only=True,
+    )
+
+    def validate_current_password(self, value):
+        user = self.context['request'].user
+        is_password_valid = user.check_password(value)
+        if is_password_valid:
+            return value
+        else:
+            self.fail("invalid_password")
