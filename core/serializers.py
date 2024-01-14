@@ -43,9 +43,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         model = User
         fields = ('email', 'password', 're_password', )
 
-    def to_representation(self, instance):
-        return dict()
-
     def validate(self, data):
         re_password = data.pop("re_password")
 
@@ -88,9 +85,6 @@ class UserAdminUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("groups", )
-    
-    def to_representation(self, instance):
-        return dict()
     
     def update(self, instance, validated_data):
         groups_data = validated_data.get("groups")
