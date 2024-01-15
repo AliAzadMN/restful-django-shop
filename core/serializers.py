@@ -135,7 +135,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return instance
 
 
-class UserDeleteSerializer(serializers.Serializer):
+class CurrentPasswordSerializer(serializers.Serializer):
     default_error_messages = {
         "invalid_password": Messages.INVALID_PASSWORD_ERROR,
     }
@@ -152,3 +152,7 @@ class UserDeleteSerializer(serializers.Serializer):
             return value
         else:
             self.fail("invalid_password")
+
+
+class UserDeleteSerializer(CurrentPasswordSerializer):
+    pass
