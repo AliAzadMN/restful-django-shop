@@ -26,9 +26,11 @@ class UserViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action == 'create':
             return [IsNotAuthenticated(), ]
+        if self.action in ['list', 'retrieve', 'update', 'partial_update', 'destroy']:
+            return [IsSuperUser(), ]
         if self.action == 'me':
             return [IsAuthenticated(), ]
-        return [IsSuperUser(), ]
+        return super().get_permissions()
     
     def get_serializer_class(self):
         if self.action == 'create':
@@ -73,4 +75,4 @@ class UserViewSet(ModelViewSet):
             serializer.is_valid(raise_exception=True)
             user.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-         
+        
