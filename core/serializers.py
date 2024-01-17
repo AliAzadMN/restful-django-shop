@@ -156,3 +156,30 @@ class CurrentPasswordSerializer(serializers.Serializer):
 
 class UserDeleteSerializer(CurrentPasswordSerializer):
     pass
+
+
+class SetPasswordSerializer(serializers.Serializer):
+    default_error_messages = {
+        "password_mismatch": Messages.PASSWORD_MISMATCH_ERROR,
+    }
+
+    new_password = serializers.CharField(style={"input_type": "password"})
+    re_new_password = serializers.CharField(style={"input_type": "password"})
+
+    def validate(self, data):
+        user = getattr(self, "user", None) or self.context["request"].user
+        # why assert? There are ValidationError / fail everywhere
+        assert user is not None
+        new_password = data["new_password"]
+
+        try:
+            validate_password(new_password, user)
+        except exceptions.ValidationError as e:
+            raise serializers.ValidationError({"new_password": list(e.messages)})
+        
+        re_new_password = data["re_new_password"]
+
+        if new_password == re_new_password:
+            return data
+        else:
+            self.fail("password_mismatch")
