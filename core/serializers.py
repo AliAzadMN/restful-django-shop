@@ -183,3 +183,7 @@ class SetPasswordSerializer(serializers.Serializer):
             return data
         else:
             self.fail("password_mismatch")
+
+
+class UserChangePasswordSerializer(CurrentPasswordSerializer, SetPasswordSerializer):
+    pass
