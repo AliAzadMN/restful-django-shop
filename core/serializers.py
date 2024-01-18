@@ -187,3 +187,17 @@ class SetPasswordSerializer(serializers.Serializer):
 
 class UserChangePasswordSerializer(CurrentPasswordSerializer, SetPasswordSerializer):
     pass
+
+
+class UserFunctionsMixin:
+    def get_user(self, is_active=True):
+        try:
+            user = User._default_manager.get(
+                is_active=is_active,
+                **{self.email_field: self.data.get(self.email_field, "")},
+            )
+            if user.has_usable_password():
+                return user
+            
+        except User.DoesNotExist:
+            self.fail("email_not_found")
