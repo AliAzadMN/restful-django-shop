@@ -7,6 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from .models import User
 from .permissions import IsSuperUser, IsNotAuthenticated
 from .serializers import (
+     UserChangePasswordSerializer,
      UserDeleteSerializer,
      UserRetrieveSerializer,
      UserSerializer,
@@ -28,7 +29,7 @@ class UserViewSet(ModelViewSet):
             return [IsNotAuthenticated(), ]
         if self.action in ['list', 'retrieve', 'update', 'partial_update', 'destroy']:
             return [IsSuperUser(), ]
-        if self.action == 'me':
+        if self.action in ['me', 'change_password']:
             return [IsAuthenticated(), ]
         return super().get_permissions()
     
@@ -44,6 +45,8 @@ class UserViewSet(ModelViewSet):
                 return UserUpdateSerializer
             if self.request.method == 'DELETE':
                 return UserDeleteSerializer
+        if self.action == 'change_password':
+            return UserChangePasswordSerializer
         return UserSerializer
     
     def create_update_resource(self, request, **kwargs):
@@ -75,4 +78,13 @@ class UserViewSet(ModelViewSet):
             serializer.is_valid(raise_exception=True)
             user.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        
+
+    @action(detail=False, methods=['POST'])    
+    def change_password(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_password = serializer.data['new_password']
+        request.user.set_password(new_password)
+        request.user.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
