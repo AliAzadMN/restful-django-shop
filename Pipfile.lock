@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "51078261bf72838139eab7f258364882003f31997cb4dc706fc328631364f4a3"
+            "sha256": "0e1e3ceabcc4ebcc713a23db53d286ce17e9fbdb9126488166cfdc579e1aed29"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -42,6 +42,14 @@
             "markers": "python_version >= '3.8'",
             "version": "==4.2.0"
         },
+        "django-templated-mail": {
+            "hashes": [
+                "sha256:8db807effebb42a532622e2d142dfd453dafcd0d7794c4c3332acb90656315f9",
+                "sha256:f7127e1e31d7cad4e6c4b4801d25814d4b8782627ead76f4a75b3b7650687556"
+            ],
+            "index": "pypi",
+            "version": "==1.1.1"
+        },
         "djangorestframework": {
             "hashes": [
                 "sha256:579a333e6256b09489cbe0a067e66abe55c6595d8926be6b99423786334350c8",
@@ -62,20 +70,20 @@
         },
         "environs": {
             "hashes": [
-                "sha256:41aa9d9fdb52953d3083638dca76b157e32714ffc67251d855ade241dee8a3f8",
-                "sha256:a8968e7d5b2b656cc17f6273d4b312654397ffa7ab0875c33c36699e1106a374"
+                "sha256:cc421ddb143fa30183568164755aa113a160e555cd19e97e664c478662032c24",
+                "sha256:feeaf28f17fd0499f9cd7c0fcf408c6d82c308e69e335eb92d09322fc9ed8138"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.7'",
-            "version": "==10.0.0"
+            "markers": "python_version >= '3.8'",
+            "version": "==10.3.0"
         },
         "marshmallow": {
             "hashes": [
-                "sha256:5d2371bbe42000f2b3fb5eaa065224df7d8f8597bc19a1bbfa5bfe7fba8da889",
-                "sha256:684939db93e80ad3561392f47be0230743131560a41c5110684c16e21ade0a5c"
+                "sha256:4c1daff273513dc5eb24b219a8035559dc573c8f322558ef85f5438ddd1236dd",
+                "sha256:c21d4b98fee747c130e6bc8f45c4b3199ea66bc00c12ee1f639f0aeca034d5e9"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==3.20.1"
+            "version": "==3.20.2"
         },
         "mysqlclient": {
             "hashes": [

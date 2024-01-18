@@ -10,6 +10,7 @@ mysqlclient = "*"
 djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 django-debug-toolbar = "*"
+django-templated-mail = "*"
 
 [dev-packages]
 
