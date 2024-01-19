@@ -201,3 +201,16 @@ class UserFunctionsMixin:
             
         except User.DoesNotExist:
             self.fail("email_not_found")
+
+
+class UserResetPasswordSerializer(serializers.Serializer, UserFunctionsMixin):
+    default_error_messages = {
+        "email_not_found": Messages.EMAIL_NOT_FOUND,
+    }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.email_field = User.get_email_field_name()
+        self.fields[self.email_field] = serializers.EmailField()
+        
