@@ -1,12 +1,15 @@
 from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.tokens import default_token_generator
 from django.core import exceptions
 from django.db import IntegrityError
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.settings import api_settings
 
 from .constants import Messages
 from .models import User
+from .utils import decode_uid
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -213,4 +216,38 @@ class UserResetPasswordSerializer(serializers.Serializer, UserFunctionsMixin):
 
         self.email_field = User.get_email_field_name()
         self.fields[self.email_field] = serializers.EmailField()
+        
+
+class UidAndTokenSerializer(serializers.Serializer):
+    uid = serializers.CharField()
+    token = serializers.CharField()
+
+    default_error_messages = {
+        "invalid_token": Messages.INVALID_TOKEN_ERROR,
+        "invalid_uid": Messages.INVALID_UID_ERROR,
+    }
+
+    def validate(self, data):
+        validated_data = super().validate(data)
+
+        try:
+            uid = decode_uid(self.initial_data.get("uid", ""))
+            self.user = User.objects.get(pk=uid)
+        except (User.DoesNotExist, ValueError, TypeError, OverflowError):
+            key_error = "invalid_uid"
+            raise ValidationError(
+                {"uid": [self.error_messages[key_error]]}, code=key_error
+            )
+
+        is_valid_token = default_token_generator.check_token(
+            self.user,
+            self.initial_data.get("token", ""),
+        )
+        if is_valid_token:
+            return validated_data
+        else:
+            key_error = "invalid_token"
+            raise ValidationError(
+                {"token": [self.error_messages[key_error]]}, code=key_error
+            )
         

@@ -6,3 +6,5 @@ class Messages:
     CANNOT_CREATE_USER_ERROR = _("Unable to create account.")
     INVALID_PASSWORD_ERROR = _("Invalid password.")
     EMAIL_NOT_FOUND = _("User with given email does not exist.")
+    INVALID_TOKEN_ERROR = _("Invalid token for given user.")
+    INVALID_UID_ERROR = _("Invalid user id or user doesn't exist.")
