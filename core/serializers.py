@@ -250,4 +250,7 @@ class UidAndTokenSerializer(serializers.Serializer):
             raise ValidationError(
                 {"token": [self.error_messages[key_error]]}, code=key_error
             )
-        
+
+
+class UserResetPasswordConfirmSerializer(UidAndTokenSerializer, SetPasswordSerializer):
+    pass
