@@ -10,6 +10,7 @@ from .permissions import IsSuperUser, IsNotAuthenticated
 from .serializers import (
      UserChangePasswordSerializer,
      UserDeleteSerializer,
+     UserResetPasswordConfirmSerializer,
      UserResetPasswordSerializer,
      UserRetrieveSerializer,
      UserSerializer,
@@ -51,6 +52,8 @@ class UserViewSet(ModelViewSet):
             return UserChangePasswordSerializer
         if self.action == 'reset_password':
             return UserResetPasswordSerializer
+        if self.action == 'reset_password_confirm':
+            return UserResetPasswordConfirmSerializer
         return UserSerializer
     
     def create_update_resource(self, request, **kwargs):
@@ -103,4 +106,13 @@ class UserViewSet(ModelViewSet):
             email = PasswordResetEmail(request, context)
             email.send(to=[user.email])
 
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=False, methods=['POST'])
+    def reset_password_confirm(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_password = serializer.data['new_password']
+        serializer.user.set_password(new_password)
+        serializer.user.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
