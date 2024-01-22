@@ -9,6 +9,7 @@ from .models import User
 from .permissions import IsSuperUser, IsNotAuthenticated
 from .serializers import (
      UserChangePasswordSerializer,
+     UserChangeUsernameSerializer,
      UserDeleteSerializer,
      UserResetPasswordConfirmSerializer,
      UserResetPasswordSerializer,
@@ -32,7 +33,7 @@ class UserViewSet(ModelViewSet):
             return [IsNotAuthenticated(), ]
         if self.action in ['list', 'retrieve', 'update', 'partial_update', 'destroy']:
             return [IsSuperUser(), ]
-        if self.action in ['me', 'change_password']:
+        if self.action in ['me', 'change_password', 'change_username']:
             return [IsAuthenticated(), ]
         return super().get_permissions()
     
@@ -54,6 +55,8 @@ class UserViewSet(ModelViewSet):
             return UserResetPasswordSerializer
         if self.action == 'reset_password_confirm':
             return UserResetPasswordConfirmSerializer
+        if self.action == 'change_username':
+            return UserChangeUsernameSerializer
         return UserSerializer
     
     def create_update_resource(self, request, **kwargs):
@@ -115,4 +118,14 @@ class UserViewSet(ModelViewSet):
         new_password = serializer.data['new_password']
         serializer.user.set_password(new_password)
         serializer.user.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=False, methods=['POST'], url_path=f"change_{User.USERNAME_FIELD}")
+    def change_username(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = request.user
+        new_username = serializer.data["new_" + User.USERNAME_FIELD]
+        setattr(user, User.USERNAME_FIELD, new_username)
+        user.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
