@@ -264,3 +264,9 @@ class UsernameSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields[f"new_{User.USERNAME_FIELD}"] = self.fields.pop(User.USERNAME_FIELD)
+
+
+class UserChangeUsernameSerializer(CurrentPasswordSerializer, UsernameSerializer):
+    class Meta(UsernameSerializer.Meta):
+        fields = (User.USERNAME_FIELD, "current_password")
+        
