@@ -254,3 +254,13 @@ class UidAndTokenSerializer(serializers.Serializer):
 
 class UserResetPasswordConfirmSerializer(UidAndTokenSerializer, SetPasswordSerializer):
     pass
+
+
+class UsernameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (User.USERNAME_FIELD, )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields[f"new_{User.USERNAME_FIELD}"] = self.fields.pop(User.USERNAME_FIELD)
