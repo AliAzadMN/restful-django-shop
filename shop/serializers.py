@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Category
+from .models import Category, Product
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -21,4 +21,12 @@ class CategoryCreateUpdateSerializer(serializers.ModelSerializer):
         if title and len(title) < 3:
             return serializers.ValidationError("Product title length should be at least 3")
         return data
+        
+
+class ProductSerializer(serializers.ModelSerializer):
+    category = serializers.CharField(source='category.title')
+
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'category', 'inventory', 'price', 'description', ]
         
