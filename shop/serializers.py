@@ -1,3 +1,4 @@
+from django.utils.text import slugify
 from rest_framework import serializers
 
 from .models import Category, Product
@@ -29,4 +30,27 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name', 'category', 'inventory', 'price', 'description', ]
-        
+
+
+class ProductCreateUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['name', 'category', 'description', 'price', 'inventory', ]
+    
+    def create(self, validated_data):
+        product = Product(**validated_data)
+        product.slug = slugify(product.name)
+        product.save()
+        return product
+    
+    def update(self, instance, validated_data):
+        for field in ProductCreateUpdateSerializer.Meta.fields:
+            setattr(
+                instance,
+                field,
+                validated_data.get(field, getattr(instance, field))
+            )
+        instance.slug = slugify(instance.name)
+        instance.save()
+        return instance
+    
