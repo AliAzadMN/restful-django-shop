@@ -11,6 +11,7 @@ djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 django-debug-toolbar = "*"
 django-templated-mail = "*"
+drf-nested-routers = "*"
 
 [dev-packages]
 
