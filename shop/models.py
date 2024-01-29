@@ -27,18 +27,10 @@ class Product(models.Model):
 
 
 class Comment(models.Model):
-    COMMENT_STATUS_APPROVED = 'a'
-    COMMENT_STATUS_NOT_APPROVED = 'na'
-    COMMENT_STATUS = (
-        (COMMENT_STATUS_APPROVED, 'Approved'),
-        (COMMENT_STATUS_NOT_APPROVED, 'Not Approved'),
-    )
-
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     body = models.TextField()
     datetime_created = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=2, choices=COMMENT_STATUS, default=COMMENT_STATUS_APPROVED)
 
 
 class Address(models.Model):
