@@ -1,7 +1,7 @@
 from django.utils.text import slugify
 from rest_framework import serializers
 
-from .models import Category, Product
+from .models import Category, Comment, Product
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -54,3 +54,11 @@ class ProductCreateUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
+
+class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source="user.full_name")
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'user', 'body', 'datetime_created', ]
+        
