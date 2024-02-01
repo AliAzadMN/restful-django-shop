@@ -61,4 +61,17 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'user', 'body', 'datetime_created', ]
+
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['body', ]
+
+    def create(self, validated_data):
+        comment = Comment(**validated_data)
+        comment.product_id = self.context['product_pk']
+        comment.user = self.context['request'].user
+        comment.save()
+        return comment
         
